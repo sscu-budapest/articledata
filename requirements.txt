@@ -1,1 +1,4 @@
-sscutils
+# datazimmer
+git+https://github.com/sscu-budapest/datazimmer
+requests
+beautifulsoup4

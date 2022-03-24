@@ -1,0 +1,10 @@
+stages:
+  complete-hackernews:
+    cmd: python -m src complete-hackernews
+    deps:
+    - src/hackernews.py
+    params:
+    - zimmer.yaml:
+      - cron_bumps.complete-hackernews
+    outs:
+    - data/articles/hackernews/complete/post
