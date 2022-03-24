@@ -18,8 +18,8 @@ jobs:
     - env:
         CRON_TRIGGER: '{{ github.event.schedule }}'
       name: Bump crons
-      run: inv run-cronjobs && inv publish-data
+      run: inv build && inv run-cronjobs && inv publish-data
 name: Scheduled Run
 on:
   schedule:
-  - cron: 0 * * * *
+  - cron: 40 * * * *
