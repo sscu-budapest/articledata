@@ -12,7 +12,7 @@ jobs:
       run: git config --global init.defaultBranch main;git config --global user.email
         "leo@dumbartonserum.com";git config --global user.name "Leo Dumbarton"
     - env:
-        DVC_LOCAL_CONF: ${{ secrets.PYPI_TOKEN }}
+        DVC_LOCAL_CONF: ${{ secrets.DVC_LOCAL }}
       name: Setup Auth
       run: echo "$DVC_LOCAL_CONF" > .dvc/config.local
     - env:
