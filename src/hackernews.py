@@ -21,7 +21,7 @@ class PostFeatures(dz.TableFeaturesBase):
 post_table = dz.ScruTable(PostFeatures, max_partition_size=10_000)
 
 
-@dz.register(outputs=[post_table], cron="20 * * * *")
+@dz.register(outputs=[post_table], cron="40 * * * *")
 def collect():
     soup = BeautifulSoup(requests.get("https://news.ycombinator.com/").content, "html5lib")
     recs = []
