@@ -12,14 +12,14 @@ jobs:
       run: git config --global init.defaultBranch main;git config --global user.email
         "leo@dumbartonserum.com";git config --global user.name "Leo Dumbarton"
     - env:
-        DVC_LOCAL_CONF: '{{ secrets.DVC_LOCAL }}'
+        DVC_LOCAL_CONF: ${{ secrets.PYPI_TOKEN }}
       name: Setup Auth
       run: echo "$DVC_LOCAL_CONF" > .dvc/config.local
     - env:
-        CRON_TRIGGER: '{{ github.event.schedule }}'
+        CRON_TRIGGER: ${{ secrets.PYPI_TOKEN }}
       name: Bump crons
       run: inv build && inv run-cronjobs && inv publish-data
 name: Scheduled Run
 on:
   schedule:
-  - cron: 40 * * * *
+  - cron: 42 * * * *
