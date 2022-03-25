@@ -16,12 +16,13 @@ class PostFeatures(dz.TableFeaturesBase):
     score = int
     poster = str
     comments = int
+    collected = dt.datetime
 
 
 post_table = dz.ScruTable(PostFeatures, max_partition_size=10_000)
 
 
-@dz.register(outputs=[post_table], cron="55 * * * *")
+@dz.register(outputs_persist=[post_table], cron="55 * * * *")
 def collect():
     soup = BeautifulSoup(requests.get("https://news.ycombinator.com/").content, "html5lib")
     recs = []
@@ -41,7 +42,7 @@ def collect():
             PostFeatures.comments: _parseint(last_link) if "comment" in last_link.text else 0,
         }
         recs.append(rec)
-
+    print(post_table.get_full_df().shape)
     pd.DataFrame(recs).assign(collected=dt.datetime.now()).pipe(post_table.extend)
 
 
