@@ -3,3 +3,4 @@ git+https://github.com/sscu-budapest/datazimmer
 requests
 beautifulsoup4
 dvc[s3]
+html5lib

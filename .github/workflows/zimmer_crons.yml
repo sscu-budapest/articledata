@@ -1,7 +1,7 @@
 name: Scheduled Run
 on:
   schedule:
-  - cron: 40 * * * *
+  - cron: 55 * * * *
 jobs:
   cron_run:
     runs-on: ubuntu-latest
