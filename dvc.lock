@@ -4,13 +4,13 @@ stages:
     cmd: python -m src complete-hackernews
     deps:
     - path: src/hackernews.py
-      md5: f0ad9b494ed4427ca4629fc37804e15b
-      size: 1646
+      md5: c391ac078d133a4ca6dfc1cdd35a3f02
+      size: 1723
     params:
       zimmer.yaml:
-        cron_bumps.complete-hackernews: 3
+        cron_bumps.complete-hackernews: 0
     outs:
     - path: data/articles/hackernews/complete/post
-      md5: d0b023415f4477b898850eecee7c82c2.dir
-      size: 12054
+      md5: 733f7b0dee9aa27ced2546217b3d2337.dir
+      size: 12421
       nfiles: 1

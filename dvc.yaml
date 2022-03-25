@@ -7,4 +7,5 @@ stages:
     - zimmer.yaml:
       - cron_bumps.complete-hackernews
     outs:
-    - data/articles/hackernews/complete/post
+    - data/articles/hackernews/complete/post:
+        persist: true
