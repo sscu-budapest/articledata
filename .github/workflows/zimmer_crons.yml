@@ -1,5 +1,9 @@
+name: Scheduled Run
+on:
+  schedule:
+  - cron: 20 * * * *
 jobs:
-  test_schedule:
+  cron_run:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -11,18 +15,12 @@ jobs:
     - name: Setup Git
       run: git config --global init.defaultBranch main;git config --global user.email
         "leo@dumbartonserum.com";git config --global user.name "Leo Dumbarton"
-    - env:
+    - name: Setup Auth
+      env:
         DVC_LOCAL_CONF: ${{ secrets.DVC_LOCAL }}
-      name: Setup Auth
       run: echo "$DVC_LOCAL_CONF" > .dvc/config.local
-    - env:
-        CRON_TRIGGER: ${{ secrets.PYPI_TOKEN }}
-      name: Bump crons
+    - name: Bump crons
+      env:
+        CRON_TRIGGER: ${{ github.event.schedule }}
+        ZIMMER_REGISTRY: ${{ secrets.ZIMMER_REGISTRY }}
       run: inv build && inv run-cronjobs && inv publish-data
-name: Scheduled Run
-on:
-  push:
-    branches:
-      main
-  schedule:
-  - cron: 40 7 * * *
