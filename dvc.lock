@@ -8,9 +8,9 @@ stages:
       size: 1723
     params:
       zimmer.yaml:
-        cron_bumps.complete-hackernews: 240
+        cron_bumps.complete-hackernews: 241
     outs:
     - path: data/articles/hackernews/complete/post
-      md5: 0875299207f5833b4cad189327fcbda0.dir
-      size: 12657
+      md5: f1dd584f47a2720f98d7349407ebdd0a.dir
+      size: 12523
       nfiles: 1
