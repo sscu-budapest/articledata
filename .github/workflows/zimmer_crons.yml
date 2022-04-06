@@ -23,4 +23,4 @@ jobs:
       env:
         CRON_TRIGGER: ${{ github.event.schedule }}
         ZIMMER_REGISTRY: ${{ secrets.ZIMMER_REGISTRY }}
-      run: inv build && inv run-cronjobs && inv publish-data
+      run: datazimmer build-meta && datazimmer run-cronjobs && datazimmer publish-data
