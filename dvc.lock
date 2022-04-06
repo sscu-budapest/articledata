@@ -1,16 +1,16 @@
 schema: '2.0'
 stages:
   complete-hackernews:
-    cmd: python -m src complete-hackernews
+    cmd: datazimmer run-step complete-hackernews
     deps:
     - path: src/hackernews.py
       md5: c391ac078d133a4ca6dfc1cdd35a3f02
       size: 1723
     params:
       zimmer.yaml:
-        cron_bumps.complete-hackernews: 262
+        cron_bumps.complete-hackernews: 263
     outs:
     - path: data/articles/hackernews/complete/post
-      md5: 75a269edd3144e0d24f77807332ddfd5.dir
-      size: 11764
+      md5: 6581165eac24b8f2e038c3f87d71befe.dir
+      size: 12218
       nfiles: 1

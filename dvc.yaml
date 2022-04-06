@@ -1,6 +1,6 @@
 stages:
   complete-hackernews:
-    cmd: python -m src complete-hackernews
+    cmd: datazimmer run-step complete-hackernews
     deps:
     - src/hackernews.py
     params:
