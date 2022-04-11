@@ -1,5 +1,7 @@
 name: Scheduled Run
 on:
+  schedule:
+  - cron: 55 * * * *
   push:
     branches: main
 jobs:
