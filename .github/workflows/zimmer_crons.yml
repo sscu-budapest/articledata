@@ -2,8 +2,6 @@ name: Scheduled Run
 on:
   schedule:
   - cron: 55 * * * *
-  push:
-    branches: main
 jobs:
   cron_run:
     runs-on: ubuntu-latest
