@@ -24,7 +24,9 @@ post_table = dz.ScruTable(PostFeatures, max_partition_size=10_000)
 
 @dz.register(outputs_persist=[post_table], cron="55 * * * *")
 def collect():
-    soup = BeautifulSoup(requests.get("https://news.ycombinator.com/").content, "html5lib")
+    soup = BeautifulSoup(
+        requests.get("https://news.ycombinator.com/").content, "html5lib"
+    )
     recs = []
     for tr in soup.find_all("tr", class_="athing"):
         title_a = tr.find("a", class_="titlelink")
@@ -35,11 +37,17 @@ def collect():
             PostFeatures.rank: int(float(tr.find("span", class_="rank").text)),
             PostFeatures.title: title_a.text.strip(),
             PostFeatures.link: title_a["href"],
-            PostFeatures.sitebit: getattr(tr.find("span", class_="sitebit"), "text", "").strip(),
+            PostFeatures.sitebit: getattr(
+                tr.find("span", class_="sitebit"), "text", ""
+            ).strip(),
             PostFeatures.posted: sub_info.find("span", class_="age")["title"],
             PostFeatures.score: _parseint(sub_info.find("span", class_="score")),
-            PostFeatures.poster: getattr(sub_info.find("a", class_="hnuser"), "text", "").strip(),
-            PostFeatures.comments: _parseint(last_link) if "comment" in last_link.text else 0,
+            PostFeatures.poster: getattr(
+                sub_info.find("a", class_="hnuser"), "text", ""
+            ).strip(),
+            PostFeatures.comments: _parseint(last_link)
+            if "comment" in last_link.text
+            else 0,
         }
         recs.append(rec)
     print(post_table.get_full_df().shape)
