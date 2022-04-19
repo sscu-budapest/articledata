@@ -4,3 +4,4 @@ requests
 beautifulsoup4
 dvc[s3]
 html5lib
+lxml
