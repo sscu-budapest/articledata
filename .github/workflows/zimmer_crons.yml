@@ -2,6 +2,7 @@ name: Scheduled Run
 on:
   schedule:
   - cron: 55 * * * *
+  - cron: 0 0 * * 0
 jobs:
   cron_run:
     runs-on: ubuntu-latest

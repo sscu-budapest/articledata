@@ -9,3 +9,13 @@ stages:
     outs:
     - data/articles/hackernews/complete/post:
         persist: true
+  complete-repec:
+    cmd: datazimmer run-step complete-repec
+    deps:
+    - src/repec.py
+    params:
+    - zimmer.yaml:
+      - cron_bumps.complete-repec
+    outs:
+    - data/articles/repec/complete:
+        persist: true
