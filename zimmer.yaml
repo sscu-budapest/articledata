@@ -1,5 +1,5 @@
 name: articles
 version: v0.3
 cron_bumps:
-  complete-hackernews: 583
+  complete-hackernews: 584
   complete-repec: 0
