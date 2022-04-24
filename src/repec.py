@@ -79,7 +79,7 @@ nep_base = dz.SourceUrl("http://nep.repec.org/")
 stat_base = dz.SourceUrl("https://logec.repec.org")
 
 
-@dz.register_data_loader(cron="0 0 * * 0")
+@dz.register_data_loader(cron="0 0 1 * *")
 def load():
     nep_df = pd.read_html(nep_base)[3].rename(
         columns={"edited by": NepFeatures.info, "access": NepIndex.nid}
