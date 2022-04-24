@@ -19,3 +19,24 @@ stages:
     outs:
     - data/articles/repec/complete:
         persist: true
+  minimal-hackernews:
+    cmd: datazimmer run-step minimal-hackernews
+    deps:
+    - src/hackernews.py
+    params:
+    - zimmer.yaml:
+      - cron_bumps.minimal-hackernews
+    outs:
+    - data/articles/hackernews/minimal/post:
+        persist: true
+  minimal-repec:
+    cmd: datazimmer run-step minimal-repec
+    deps:
+    - data/articles/repec/complete
+    - src/repec.py
+    params:
+    - zimmer.yaml:
+      - envs.minimal.params.repec.abstract_chars
+      - envs.minimal.params.repec.min_papers_per_author
+    outs:
+    - data/articles/repec/minimal

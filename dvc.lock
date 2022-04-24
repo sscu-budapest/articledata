@@ -18,13 +18,46 @@ stages:
     cmd: datazimmer run-step complete-repec
     deps:
     - path: src/repec.py
-      md5: b277a71103a561cf1d489b08792340f6
-      size: 6700
+      md5: 4b0509d853cffb39f8475ffc84157613
+      size: 7992
     params:
       zimmer.yaml:
         cron_bumps.complete-repec: 1
     outs:
     - path: data/articles/repec/complete
-      md5: 619ca7b651c75a9301eada96708ac0be.dir
-      size: 300217026
-      nfiles: 7
+      md5: 908d3156d9c43fc8c3ca915ce21f69e2.dir
+      size: 291740492
+      nfiles: 6
+  minimal-hackernews:
+    cmd: datazimmer run-step minimal-hackernews
+    deps:
+    - path: src/hackernews.py
+      md5: e843dfdfe93b81803b8b51347ac2d243
+      size: 1821
+    params:
+      zimmer.yaml:
+        cron_bumps.minimal-hackernews: 0
+    outs:
+    - path: data/articles/hackernews/minimal/post
+      md5: 40239572d06a46d1848a2a4058cc5e3a.dir
+      size: 13150
+      nfiles: 1
+  minimal-repec:
+    cmd: datazimmer run-step minimal-repec
+    deps:
+    - path: data/articles/repec/complete
+      md5: 908d3156d9c43fc8c3ca915ce21f69e2.dir
+      size: 291740492
+      nfiles: 6
+    - path: src/repec.py
+      md5: 4b0509d853cffb39f8475ffc84157613
+      size: 7992
+    params:
+      zimmer.yaml:
+        envs.minimal.params.repec.abstract_chars: 150
+        envs.minimal.params.repec.min_papers_per_author: 3
+    outs:
+    - path: data/articles/repec/minimal
+      md5: e793a708e57c80257d36bb97dc1c5cb8.dir
+      size: 81626897
+      nfiles: 6

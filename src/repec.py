@@ -121,10 +121,41 @@ def load():
     )
 
 
-# @dz.register_env_creator
-def make_envs():
+@dz.register_env_creator
+def make_envs(abstract_chars, min_papers_per_author):
+    au_df = authorship_table.get_full_df()
     # TODO with min number of papers
-    pass
+    au_df = (
+        authorship_table.get_full_df(env="complete")
+        .assign(c=1)
+        .groupby("author__aid")
+        .transform("sum")
+        .loc[lambda df: df["c"] >= min_papers_per_author]
+    )
+    pids = au_df.index.get_level_values(AuthorshipIndex.paper.pid).unique().to_numpy()
+    aids = au_df.index.get_level_values(AuthorshipIndex.author.aid).unique().to_numpy()
+    paper_df = (
+        paper_table.get_full_df()
+        .loc[pids, :]
+        .assign(
+            **{
+                PaperFeatures.abstract: lambda df: df[PaperFeatures.abstract].str[
+                    :abstract_chars
+                ]
+            }
+        )
+    )
+    neinc_df = nep_inclusion_table.get_full_df().loc[lambda df: df[NepInclusionFeatures.paper.pid].isin(set(pids)), :]
+    dz.dump_dfs_to_tables(
+        [
+            (au_df, authorship_table),
+            (paper_df, paper_table),
+            (author_table.get_full_df().loc[aids, :], author_table),
+            (nep_table.get_full_df(), nep_table),
+            (nep_issue_table.get_full_df(), nep_issue_table),
+            (neinc_df, nep_inclusion_table)
+        ]
+    )
 
 
 def get_soup(url):

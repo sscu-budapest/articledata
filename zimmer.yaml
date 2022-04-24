@@ -1,5 +1,13 @@
 name: articles
 version: v0.4
+envs:
+  complete: {}
+  minimal:
+    params:
+      repec:
+        abstract_chars: 150
+        min_papers_per_author: 3
 cron_bumps:
   complete-hackernews: 672
   complete-repec: 1
+  minimal-hackernews: 0
