@@ -22,9 +22,9 @@ stages:
       size: 4006
     params:
       zimmer.yaml:
-        cron_bumps.complete-repec: 0
+        cron_bumps.complete-repec: 1
     outs:
     - path: data/articles/repec/complete
-      md5: f6f4251ceb7c1e0134a6f8f5e3b4521e.dir
-      size: 19912880
+      md5: 9ac67e45c9f000ef1fbde34bf130a356.dir
+      size: 19931020
       nfiles: 4
