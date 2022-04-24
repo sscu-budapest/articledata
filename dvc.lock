@@ -18,13 +18,13 @@ stages:
     cmd: datazimmer run-step complete-repec
     deps:
     - path: src/repec.py
-      md5: a74cbec833b8545fc57356b55a7b55fc
-      size: 4006
+      md5: b277a71103a561cf1d489b08792340f6
+      size: 6700
     params:
       zimmer.yaml:
         cron_bumps.complete-repec: 1
     outs:
     - path: data/articles/repec/complete
-      md5: 9ac67e45c9f000ef1fbde34bf130a356.dir
-      size: 19931020
-      nfiles: 4
+      md5: 619ca7b651c75a9301eada96708ac0be.dir
+      size: 300217026
+      nfiles: 7
