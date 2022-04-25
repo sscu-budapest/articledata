@@ -8,11 +8,11 @@ stages:
       size: 1821
     params:
       zimmer.yaml:
-        cron_bumps.complete-hackernews: 684
+        cron_bumps.complete-hackernews: 685
     outs:
     - path: data/articles/hackernews/complete/post
-      md5: 8fb8dc1b1cc24dd812d13322341c0c58.dir
-      size: 505788
+      md5: 9a6e49458b837170e1ef6f45f61e9b65.dir
+      size: 506320
       nfiles: 2
   complete-repec:
     cmd: datazimmer run-step complete-repec
@@ -36,11 +36,11 @@ stages:
       size: 1821
     params:
       zimmer.yaml:
-        cron_bumps.minimal-hackernews: 11
+        cron_bumps.minimal-hackernews: 12
     outs:
     - path: data/articles/hackernews/minimal/post
-      md5: d6aba04cbb5927a769e4d23b809fbd38.dir
-      size: 21110
+      md5: 377f0154996f5062df8556776a96855b.dir
+      size: 21597
       nfiles: 1
   minimal-repec:
     cmd: datazimmer run-step minimal-repec
