@@ -11,22 +11,22 @@ stages:
         cron_bumps.complete-hackernews: 820
     outs:
     - path: data/articles/hackernews/complete/post
-      md5: 183b4e0a4cefdd9765cf50262c5e434a.dir
-      size: 614827
+      md5: daa675a8a663da7574fdb3ddcd1a38b1.dir
+      size: 501739
       nfiles: 2
   complete-repec:
     cmd: datazimmer run-step complete-repec
     deps:
     - path: src/repec.py
-      md5: 4b0509d853cffb39f8475ffc84157613
-      size: 7992
+      md5: c98abe47527a50e9a6d9495194b0884b
+      size: 8058
     params:
       zimmer.yaml:
         cron_bumps.complete-repec: 1
     outs:
     - path: data/articles/repec/complete
-      md5: 908d3156d9c43fc8c3ca915ce21f69e2.dir
-      size: 291740492
+      md5: bf95915f0aed44b4e3e5f0187da93d0e.dir
+      size: 292219055
       nfiles: 6
   minimal-hackernews:
     cmd: datazimmer run-step minimal-hackernews
@@ -39,25 +39,25 @@ stages:
         cron_bumps.minimal-hackernews: 147
     outs:
     - path: data/articles/hackernews/minimal/post
-      md5: efaa306e4a32db1eb0e65cb0ac9c8ee4.dir
-      size: 126899
+      md5: 25672db16b8da5b6a0699b922075efc2.dir
+      size: 17407
       nfiles: 1
   minimal-repec:
     cmd: datazimmer run-step minimal-repec
     deps:
     - path: data/articles/repec/complete
-      md5: 908d3156d9c43fc8c3ca915ce21f69e2.dir
-      size: 291740492
+      md5: bf95915f0aed44b4e3e5f0187da93d0e.dir
+      size: 292219055
       nfiles: 6
     - path: src/repec.py
-      md5: 4b0509d853cffb39f8475ffc84157613
-      size: 7992
+      md5: c98abe47527a50e9a6d9495194b0884b
+      size: 8058
     params:
       zimmer.yaml:
         envs.minimal.params.repec.abstract_chars: 150
         envs.minimal.params.repec.min_papers_per_author: 3
     outs:
     - path: data/articles/repec/minimal
-      md5: e793a708e57c80257d36bb97dc1c5cb8.dir
-      size: 81626897
+      md5: 8f5c4b8c32ecd8d9935dec6b6a542688.dir
+      size: 81790037
       nfiles: 6

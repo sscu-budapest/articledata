@@ -81,9 +81,9 @@ stat_base = dz.SourceUrl("https://logec.repec.org")
 
 @dz.register_data_loader(cron="0 0 1 * *")
 def load():
-    nep_df = pd.read_html(nep_base)[3].rename(
-        columns={"edited by": NepFeatures.info, "access": NepIndex.nid}
-    )
+    nep_df = next(
+        filter(lambda _df: _df.columns[0] == "access", pd.read_html(nep_base))
+    ).rename(columns={"edited by": NepFeatures.info, "access": NepIndex.nid})
     nep_table.replace_records(nep_df)
 
     latest_collected_issues = (
@@ -145,7 +145,9 @@ def make_envs(abstract_chars, min_papers_per_author):
             }
         )
     )
-    neinc_df = nep_inclusion_table.get_full_df().loc[lambda df: df[NepInclusionFeatures.paper.pid].isin(set(pids)), :]
+    neinc_df = nep_inclusion_table.get_full_df().loc[
+        lambda df: df[NepInclusionFeatures.paper.pid].isin(set(pids)), :
+    ]
     dz.dump_dfs_to_tables(
         [
             (au_df, authorship_table),
@@ -153,7 +155,7 @@ def make_envs(abstract_chars, min_papers_per_author):
             (author_table.get_full_df().loc[aids, :], author_table),
             (nep_table.get_full_df(), nep_table),
             (nep_issue_table.get_full_df(), nep_issue_table),
-            (neinc_df, nep_inclusion_table)
+            (neinc_df, nep_inclusion_table),
         ]
     )
 
