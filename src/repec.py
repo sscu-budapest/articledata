@@ -43,10 +43,10 @@ class NepFeatures(dz.TableFeaturesBase):
 
 class PaperFeatures(dz.TableFeaturesBase):
     link = str
-    year = float
-    abstract = str
+    year = dz.Nullable(float)
+    abstract = dz.Nullable(str)
     title = str
-    institution = str
+    institution = dz.Nullable(str)
 
 
 class AuthorFeatures(dz.TableFeaturesBase):
