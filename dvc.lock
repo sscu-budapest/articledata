@@ -8,25 +8,25 @@ stages:
       size: 1821
     params:
       zimmer.yaml:
-        cron_bumps.complete-hackernews: 886
+        cron_bumps.complete-hackernews: 887
     outs:
     - path: data/articles/hackernews/complete/post
-      md5: 55c0740ac89de77ebc0fd338dacea090.dir
-      size: 555308
+      md5: 8f8e9f03f565d38af5b86c5ed3842664.dir
+      size: 557635
       nfiles: 2
   complete-repec:
     cmd: datazimmer run-step complete-repec
     deps:
     - path: src/repec.py
-      md5: c98abe47527a50e9a6d9495194b0884b
-      size: 8058
+      md5: dfa3f51637a7751a37f1fe6fc016257c
+      size: 8097
     params:
       zimmer.yaml:
         cron_bumps.complete-repec: 1
     outs:
     - path: data/articles/repec/complete
-      md5: bf95915f0aed44b4e3e5f0187da93d0e.dir
-      size: 292219055
+      md5: 62c56f8f0589c35317eb9b0ecef5971b.dir
+      size: 292512225
       nfiles: 6
   minimal-hackernews:
     cmd: datazimmer run-step minimal-hackernews
@@ -36,28 +36,28 @@ stages:
       size: 1821
     params:
       zimmer.yaml:
-        cron_bumps.minimal-hackernews: 213
+        cron_bumps.minimal-hackernews: 214
     outs:
     - path: data/articles/hackernews/minimal/post
-      md5: 37b121e4376a5f8e99c74f888d19fadc.dir
-      size: 70427
+      md5: 5f648a020ede92c5d27c18f05c5acfb5.dir
+      size: 72738
       nfiles: 1
   minimal-repec:
     cmd: datazimmer run-step minimal-repec
     deps:
     - path: data/articles/repec/complete
-      md5: bf95915f0aed44b4e3e5f0187da93d0e.dir
-      size: 292219055
+      md5: 62c56f8f0589c35317eb9b0ecef5971b.dir
+      size: 292512225
       nfiles: 6
     - path: src/repec.py
-      md5: c98abe47527a50e9a6d9495194b0884b
-      size: 8058
+      md5: dfa3f51637a7751a37f1fe6fc016257c
+      size: 8097
     params:
       zimmer.yaml:
         envs.minimal.params.repec.abstract_chars: 150
         envs.minimal.params.repec.min_papers_per_author: 3
     outs:
     - path: data/articles/repec/minimal
-      md5: 8f5c4b8c32ecd8d9935dec6b6a542688.dir
-      size: 81790037
+      md5: ac30ec6613711bf05aef9124864a440c.dir
+      size: 81879937
       nfiles: 6
