@@ -1,5 +1,4 @@
-# datazimmer
-git+https://github.com/sscu-budapest/datazimmer
+datazimmer<0.3.0
 requests
 beautifulsoup4
 dvc[s3]
