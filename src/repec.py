@@ -7,41 +7,17 @@ import pandas as pd
 import requests
 from atqo import parallel_map
 from bs4 import BeautifulSoup
-from colassigner import get_all_cols
 
 
-class NepIndex(dz.IndexBase):
-    nid = str
-
-
-class PaperIndex(dz.IndexBase):
-    pid = str
-
-
-class AuthorIndex(dz.IndexBase):
-    aid = str
-
-
-class NepIssueIndex(dz.IndexBase):
-    neid = str
-
-
-class NepInclusionIndex(dz.IndexBase):
-    ind = int
-    issue = NepIssueIndex
-
-
-class NepIssueFeatures(dz.TableFeaturesBase):
-    nep = NepIndex
-    published = dt.datetime
-
-
-class NepFeatures(dz.TableFeaturesBase):
+class Nep(dz.AbstractEntity):
+    nid = dz.Index & str
     title = str
     info = str
 
 
-class PaperFeatures(dz.TableFeaturesBase):
+class Paper(dz.AbstractEntity):
+    pid = dz.Index & str
+
     link = str
     year = dz.Nullable(float)
     abstract = dz.Nullable(str)
@@ -49,30 +25,41 @@ class PaperFeatures(dz.TableFeaturesBase):
     institution = dz.Nullable(str)
 
 
-class AuthorFeatures(dz.TableFeaturesBase):
+class Author(dz.AbstractEntity):
+    aid = dz.Index & str
     name = str
 
 
-class NepInclusionFeatures(dz.TableFeaturesBase):
-    paper = PaperIndex
+class NepIssue(dz.AbstractEntity):
+    neid = dz.Index & str
+
+    nep = Nep
+    published = dt.datetime
 
 
-class AuthorshipIndex(dz.IndexBase):
-    paper = PaperIndex
-    author = AuthorIndex
+class NepInclusion(dz.AbstractEntity):
+    ind = dz.Index & int
+    issue = dz.Index & NepIssue
+
+    paper = Paper
 
 
-class KeywordCategorizationFeatures(dz.TableFeaturesBase):
-    paper = PaperIndex
+class Authorship(dz.AbstractEntity):
+    paper = dz.Index & Paper
+    author = dz.Index & Author
+
+
+class KeywordCategorization(dz.AbstractEntity):
+    paper = Paper
     keyword = str
 
 
-nep_table = dz.ScruTable(NepFeatures, NepIndex)
-paper_table = dz.ScruTable(PaperFeatures, PaperIndex)
-author_table = dz.ScruTable(AuthorFeatures, AuthorIndex)
-authorship_table = dz.ScruTable(index=AuthorshipIndex)
-nep_issue_table = dz.ScruTable(NepIssueFeatures, NepIssueIndex)
-nep_inclusion_table = dz.ScruTable(NepInclusionFeatures, NepInclusionIndex)
+nep_table = dz.ScruTable(Nep)
+paper_table = dz.ScruTable(Paper)
+author_table = dz.ScruTable(Author)
+authorship_table = dz.ScruTable(Authorship)
+nep_issue_table = dz.ScruTable(NepIssue)
+nep_inclusion_table = dz.ScruTable(NepInclusion)
 
 econpaper_base = dz.SourceUrl("https://econpapers.repec.org")
 nep_base = dz.SourceUrl("http://nep.repec.org/")
@@ -83,19 +70,19 @@ stat_base = dz.SourceUrl("https://logec.repec.org")
 def load():
     nep_df = next(
         filter(lambda _df: _df.columns[0] == "access", pd.read_html(nep_base))
-    ).rename(columns={"edited by": NepFeatures.info, "access": NepIndex.nid})
+    ).rename(columns={"edited by": Nep.info, "access": Nep.nid})
     nep_table.replace_records(nep_df)
 
     latest_collected_issues = (
         nep_issue_table.get_full_df()
-        .groupby(NepIssueFeatures.nep.nid)[NepIssueFeatures.published]
+        .groupby(NepIssue.nep.nid)[NepIssue.published]
         .max()
         .astype(str)
         .to_dict()
     )
     nep_rec_sets = parallel_map(
         partial(get_archive, latest_ones=latest_collected_issues),
-        nep_df[NepIndex.nid].tolist(),
+        nep_df[Nep.nid].tolist(),
         workers=10,
         dist_api="mp",
         pbar=True,
@@ -108,23 +95,21 @@ def load():
     dump_paper_meta(paper_rec_df["link"].unique())
     nep_issue_table.replace_records(
         paper_rec_df.rename(
-            columns={"nepis": NepIssueIndex.neid, "nep": NepIssueFeatures.nep.nid}
-        ).drop_duplicates(subset=[NepIssueIndex.neid])
+            columns={"nepis": NepIssue.neid, "nep": NepIssue.nep.nid}
+        ).drop_duplicates(subset=[NepIssue.neid])
     )
     nep_inclusion_table.replace_records(
         paper_rec_df.rename(
             columns={
-                "nepis": NepInclusionIndex.issue.neid,
-                "pid": NepInclusionFeatures.paper.pid,
+                "nepis": NepInclusion.issue.neid,
+                "pid": NepInclusion.paper.pid,
             }
-        ).drop_duplicates(subset=get_all_cols(NepInclusionIndex))
+        ).drop_duplicates(subset=nep_inclusion_table.index_cols)
     )
 
 
 @dz.register_env_creator
 def make_envs(abstract_chars, min_papers_per_author):
-    au_df = authorship_table.get_full_df()
-    # TODO with min number of papers
     au_df = (
         authorship_table.get_full_df(env="complete")
         .assign(c=1)
@@ -132,21 +117,15 @@ def make_envs(abstract_chars, min_papers_per_author):
         .transform("sum")
         .loc[lambda df: df["c"] >= min_papers_per_author]
     )
-    pids = au_df.index.get_level_values(AuthorshipIndex.paper.pid).unique().to_numpy()
-    aids = au_df.index.get_level_values(AuthorshipIndex.author.aid).unique().to_numpy()
+    pids = au_df.index.get_level_values(Authorship.paper.pid).unique().to_numpy()
+    aids = au_df.index.get_level_values(Authorship.author.aid).unique().to_numpy()
     paper_df = (
         paper_table.get_full_df()
         .loc[pids, :]
-        .assign(
-            **{
-                PaperFeatures.abstract: lambda df: df[PaperFeatures.abstract].str[
-                    :abstract_chars
-                ]
-            }
-        )
+        .assign(**{Paper.abstract: lambda df: df[Paper.abstract].str[:abstract_chars]})
     )
     neinc_df = nep_inclusion_table.get_full_df().loc[
-        lambda df: df[NepInclusionFeatures.paper.pid].isin(set(pids)), :
+        lambda df: df[NepInclusion.paper.pid].isin(set(pids)), :
     ]
     dz.dump_dfs_to_tables(
         [
@@ -176,18 +155,18 @@ def dump_paper_meta(paper_links):
         workers=12,
     )
     paper_meta = (
-        # pd.read_parquet("/home/borza/mega/data/metascience/repec_paper_meta.p")
         pd.DataFrame(paper_dics)
-        .assign(**{PaperIndex.pid: lambda df: paper_link_to_id(df["paper_link"])})
-        .rename(columns={"paper_link": PaperFeatures.link})
-        .set_index(PaperIndex.pid)
+        .assign(**{Paper.pid: lambda df: paper_link_to_id(df["paper_link"])})
+        .rename(columns={"paper_link": Paper.link})
+        .set_index(Paper.pid)
         .rename(
             columns=lambda s: s.replace("citation_", "").replace(
                 "technical_report_", ""
             )
         )
     )
-    paper_table.replace_records(paper_meta.reindex(get_all_cols(PaperFeatures), axis=1))
+
+    paper_table.replace_records(paper_meta.reindex(paper_table.feature_cols, axis=1))
     for usc, procfun in [("authors", proc_authors)]:
         # TODO, ("keywords", proc_keywords)]:
         if usc not in paper_meta.columns:
@@ -255,18 +234,16 @@ def get_paper_dic(paper_link):
 
 def proc_authors(rels):
     base_df = rels.assign(
-        **{AuthorIndex.aid: lambda df: df.loc[:, 0].str.lower().str.replace(", ", ":")}
+        **{Author.aid: lambda df: df.loc[:, 0].str.lower().str.replace(", ", ":")}
     )
     author_table.replace_records(
-        base_df.drop_duplicates(subset=[AuthorIndex.aid]).rename(
-            columns={0: AuthorFeatures.name}
-        )
+        base_df.drop_duplicates(subset=[Author.aid]).rename(columns={0: Author.name})
     )
     authorship_table.replace_records(
         base_df.reset_index().rename(
             columns={
-                AuthorIndex.aid: AuthorshipIndex.author.aid,
-                PaperIndex.pid: AuthorshipIndex.paper.pid,
+                Author.aid: Authorship.author.aid,
+                Paper.pid: Authorship.paper.pid,
             }
         )
     )

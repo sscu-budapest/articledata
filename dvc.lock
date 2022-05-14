@@ -4,60 +4,60 @@ stages:
     cmd: datazimmer run-step complete-hackernews
     deps:
     - path: src/hackernews.py
-      md5: e843dfdfe93b81803b8b51347ac2d243
-      size: 1821
+      md5: d7037de93b67e4c37902827401a9dab1
+      size: 1706
     params:
       zimmer.yaml:
         cron_bumps.complete-hackernews: 1119
     outs:
     - path: data/articles/hackernews/complete/post
-      md5: 13921e04a43411656375e2bdbb4bcd20.dir
-      size: 757612
+      md5: 5e1baa41c84c19354599ee21d963e46d.dir
+      size: 758366
       nfiles: 3
   complete-repec:
     cmd: datazimmer run-step complete-repec
     deps:
     - path: src/repec.py
-      md5: dfa3f51637a7751a37f1fe6fc016257c
-      size: 8097
+      md5: 09f266a4e2ca038672467a62bed3b5bb
+      size: 7324
     params:
       zimmer.yaml:
         cron_bumps.complete-repec: 1
     outs:
     - path: data/articles/repec/complete
-      md5: 62c56f8f0589c35317eb9b0ecef5971b.dir
-      size: 292512225
+      md5: 06c533878494183cff871905fb81c104.dir
+      size: 293183813
       nfiles: 6
   minimal-hackernews:
     cmd: datazimmer run-step minimal-hackernews
     deps:
     - path: src/hackernews.py
-      md5: e843dfdfe93b81803b8b51347ac2d243
-      size: 1821
+      md5: d7037de93b67e4c37902827401a9dab1
+      size: 1706
     params:
       zimmer.yaml:
         cron_bumps.minimal-hackernews: 446
     outs:
     - path: data/articles/hackernews/minimal/post
-      md5: f0e199b3ecdea2904358f0f258757abd.dir
-      size: 258795
+      md5: c30c7cc914c3b0eb7e0335b5c5f0ae2e.dir
+      size: 259652
       nfiles: 1
   minimal-repec:
     cmd: datazimmer run-step minimal-repec
     deps:
     - path: data/articles/repec/complete
-      md5: 62c56f8f0589c35317eb9b0ecef5971b.dir
-      size: 292512225
+      md5: 06c533878494183cff871905fb81c104.dir
+      size: 293183813
       nfiles: 6
     - path: src/repec.py
-      md5: dfa3f51637a7751a37f1fe6fc016257c
-      size: 8097
+      md5: 09f266a4e2ca038672467a62bed3b5bb
+      size: 7324
     params:
       zimmer.yaml:
         envs.minimal.params.repec.abstract_chars: 150
         envs.minimal.params.repec.min_papers_per_author: 3
     outs:
     - path: data/articles/repec/minimal
-      md5: ac30ec6613711bf05aef9124864a440c.dir
-      size: 81879937
+      md5: 2d0fb47cfb4f2bea350994c112a8927d.dir
+      size: 82072504
       nfiles: 6

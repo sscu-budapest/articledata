@@ -1,4 +1,4 @@
-datazimmer<0.3.0
+datazimmer
 requests
 beautifulsoup4
 dvc[s3]

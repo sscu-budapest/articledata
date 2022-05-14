@@ -6,7 +6,7 @@ import requests
 from bs4 import BeautifulSoup
 
 
-class PostFeatures(dz.TableFeaturesBase):
+class Post(dz.AbstractEntity):
     post_id = str
     rank = int
     title = str
@@ -19,7 +19,7 @@ class PostFeatures(dz.TableFeaturesBase):
     collected = dt.datetime
 
 
-post_table = dz.ScruTable(PostFeatures, max_partition_size=10_000)
+post_table = dz.ScruTable(Post, max_partition_size=10_000)
 
 
 @dz.register(outputs_persist=[post_table], cron="55 * * * *")
@@ -33,21 +33,19 @@ def collect():
         sub_info = tr.find_next("tr")
         last_link = sub_info.find_all("a")[-1]
         rec = {
-            PostFeatures.post_id: tr["id"],
-            PostFeatures.rank: int(float(tr.find("span", class_="rank").text)),
-            PostFeatures.title: title_a.text.strip(),
-            PostFeatures.link: title_a["href"],
-            PostFeatures.sitebit: getattr(
+            Post.post_id: tr["id"],
+            Post.rank: int(float(tr.find("span", class_="rank").text)),
+            Post.title: title_a.text.strip(),
+            Post.link: title_a["href"],
+            Post.sitebit: getattr(
                 tr.find("span", class_="sitebit"), "text", ""
             ).strip(),
-            PostFeatures.posted: sub_info.find("span", class_="age")["title"],
-            PostFeatures.score: _parseint(sub_info.find("span", class_="score")),
-            PostFeatures.poster: getattr(
+            Post.posted: sub_info.find("span", class_="age")["title"],
+            Post.score: _parseint(sub_info.find("span", class_="score")),
+            Post.poster: getattr(
                 sub_info.find("a", class_="hnuser"), "text", ""
             ).strip(),
-            PostFeatures.comments: _parseint(last_link)
-            if "comment" in last_link.text
-            else 0,
+            Post.comments: _parseint(last_link) if "comment" in last_link.text else 0,
         }
         recs.append(rec)
     print(post_table.get_full_df().shape)
