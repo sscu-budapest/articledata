@@ -1,7 +1,7 @@
 schema: '2.0'
 stages:
   complete-hackernews:
-    cmd: datazimmer run-step complete-hackernews
+    cmd: dz run-step complete-hackernews
     deps:
     - path: src/hackernews.py
       md5: d7037de93b67e4c37902827401a9dab1
@@ -11,11 +11,11 @@ stages:
         cron_bumps.complete-hackernews: 1349
     outs:
     - path: data/articles/hackernews/complete/post
-      md5: 562d19c5a362991a489f49a8dd0e4c82.dir
-      size: 955000
+      md5: 60a9f61dfce9cd1d4c32b7fd63c7eb47.dir
+      size: 956526
       nfiles: 4
   complete-repec:
-    cmd: datazimmer run-step complete-repec
+    cmd: dz run-step complete-repec
     deps:
     - path: src/repec.py
       md5: 09f266a4e2ca038672467a62bed3b5bb
@@ -25,11 +25,11 @@ stages:
         cron_bumps.complete-repec: 1
     outs:
     - path: data/articles/repec/complete
-      md5: 06c533878494183cff871905fb81c104.dir
-      size: 293183813
+      md5: 72313eabd749ce55b57f586c7124dc4b.dir
+      size: 293873303
       nfiles: 6
   minimal-hackernews:
-    cmd: datazimmer run-step minimal-hackernews
+    cmd: dz run-step minimal-hackernews
     deps:
     - path: src/hackernews.py
       md5: d7037de93b67e4c37902827401a9dab1
@@ -39,15 +39,15 @@ stages:
         cron_bumps.minimal-hackernews: 676
     outs:
     - path: data/articles/hackernews/minimal/post
-      md5: 0822558b976991d02610e0864deeddc8.dir
-      size: 453585
+      md5: 679424e2d0afbdc93c94fa438e1ecebb.dir
+      size: 455274
       nfiles: 2
   minimal-repec:
-    cmd: datazimmer run-step minimal-repec
+    cmd: dz run-step minimal-repec
     deps:
     - path: data/articles/repec/complete
-      md5: 06c533878494183cff871905fb81c104.dir
-      size: 293183813
+      md5: 72313eabd749ce55b57f586c7124dc4b.dir
+      size: 293873303
       nfiles: 6
     - path: src/repec.py
       md5: 09f266a4e2ca038672467a62bed3b5bb
@@ -58,6 +58,6 @@ stages:
         envs.minimal.params.repec.min_papers_per_author: 3
     outs:
     - path: data/articles/repec/minimal
-      md5: 2d0fb47cfb4f2bea350994c112a8927d.dir
-      size: 82072504
+      md5: ef9155f0904cdbfdffa85f35824bb2ff.dir
+      size: 82279668
       nfiles: 6

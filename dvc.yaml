@@ -1,6 +1,6 @@
 stages:
   complete-hackernews:
-    cmd: datazimmer run-step complete-hackernews
+    cmd: dz run-step complete-hackernews
     deps:
     - src/hackernews.py
     params:
@@ -10,7 +10,7 @@ stages:
     - data/articles/hackernews/complete/post:
         persist: true
   complete-repec:
-    cmd: datazimmer run-step complete-repec
+    cmd: dz run-step complete-repec
     deps:
     - src/repec.py
     params:
@@ -20,7 +20,7 @@ stages:
     - data/articles/repec/complete:
         persist: true
   minimal-hackernews:
-    cmd: datazimmer run-step minimal-hackernews
+    cmd: dz run-step minimal-hackernews
     deps:
     - src/hackernews.py
     params:
@@ -30,7 +30,7 @@ stages:
     - data/articles/hackernews/minimal/post:
         persist: true
   minimal-repec:
-    cmd: datazimmer run-step minimal-repec
+    cmd: dz run-step minimal-repec
     deps:
     - data/articles/repec/complete
     - src/repec.py
