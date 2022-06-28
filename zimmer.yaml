@@ -10,6 +10,6 @@ envs:
         abstract_chars: 150
         min_papers_per_author: 3
 cron_bumps:
-  complete-hackernews: 2112
+  complete-hackernews: 2113
   complete-repec: 2
-  minimal-hackernews: 1439
+  minimal-hackernews: 1440
