@@ -30,6 +30,8 @@ def collect():
     recs = []
     for tr in soup.find_all("tr", class_="athing"):
         title_a = tr.find("a", class_="titlelink")
+        if title_a is None:
+            title_a = tr.find("span", class_="titleline").find("a")
         sub_info = tr.find_next("tr")
         last_link = sub_info.find_all("a")[-1]
         rec = {
