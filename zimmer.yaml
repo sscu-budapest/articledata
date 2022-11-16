@@ -1,5 +1,6 @@
 name: articles
-version: v0.5
+version: v0.7
+cron: 0 16 * * 1
 validation_envs:
 - minimal
 envs:
@@ -9,7 +10,8 @@ envs:
       repec:
         abstract_chars: 150
         min_papers_per_author: 3
-cron_bumps:
-  complete-hackernews: 4625
-  complete-repec: 5
-  minimal-hackernews: 3952
+aswan_projects:
+  hackernews:
+    processed_upto_by_ns:
+      hackernews: 94f02c664e4b4c359f81
+    current_leaf: 94f02c664e4b4c359f81

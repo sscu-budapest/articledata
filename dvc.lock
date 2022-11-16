@@ -1,63 +1,16 @@
 schema: '2.0'
 stages:
   complete-hackernews:
-    cmd: dz run-step complete-hackernews
+    cmd: dz run-step hackernews complete
     deps:
     - path: src/hackernews.py
-      md5: d99547501afdb3d3094d783d6e0cf0cd
-      size: 1802
+      md5: 76a0471b6136a60a5b768a0a64ad92f9
+      size: 2432
     params:
       zimmer.yaml:
-        cron_bumps.complete-hackernews: 4625
+        aswan_projects.hackernews.current_leaf: 94f02c664e4b4c359f81
     outs:
-    - path: data/articles/hackernews/complete/post
-      md5: 5f31f823fa8a710db4bb5eb60f556ee0.dir
-      size: 3752526
+    - path: data/articles/hackernews/complete
+      md5: 0e7bf4daa7152bc7ccdf4260dc8fa329.dir
+      size: 3741692
       nfiles: 13
-  complete-repec:
-    cmd: dz run-step complete-repec
-    deps:
-    - path: src/repec.py
-      md5: 09f266a4e2ca038672467a62bed3b5bb
-      size: 7324
-    params:
-      zimmer.yaml:
-        cron_bumps.complete-repec: 5
-    outs:
-    - path: data/articles/repec/complete
-      md5: a876203a64d557ee33757a888d6502a3.dir
-      size: 299278577
-      nfiles: 6
-  minimal-hackernews:
-    cmd: dz run-step minimal-hackernews
-    deps:
-    - path: src/hackernews.py
-      md5: d99547501afdb3d3094d783d6e0cf0cd
-      size: 1802
-    params:
-      zimmer.yaml:
-        cron_bumps.minimal-hackernews: 3952
-    outs:
-    - path: data/articles/hackernews/minimal/post
-      md5: eb6b6127b7636190d83bc62032459d0f.dir
-      size: 3259740
-      nfiles: 12
-  minimal-repec:
-    cmd: dz run-step minimal-repec
-    deps:
-    - path: data/articles/repec/complete
-      md5: a876203a64d557ee33757a888d6502a3.dir
-      size: 299278577
-      nfiles: 6
-    - path: src/repec.py
-      md5: 09f266a4e2ca038672467a62bed3b5bb
-      size: 7324
-    params:
-      zimmer.yaml:
-        envs.minimal.params.repec.abstract_chars: 150
-        envs.minimal.params.repec.min_papers_per_author: 3
-    outs:
-    - path: data/articles/repec/minimal
-      md5: f17c73b50ff95d1d738d1d447fa05012.dir
-      size: 83986303
-      nfiles: 6
