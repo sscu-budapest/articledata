@@ -4,9 +4,8 @@ from functools import partial
 
 import datazimmer as dz
 import pandas as pd
-import requests
+from aswan import get_soup
 from atqo import parallel_map
-from bs4 import BeautifulSoup
 
 
 class Nep(dz.AbstractEntity):
@@ -66,7 +65,7 @@ nep_base = dz.SourceUrl("http://nep.repec.org/")
 stat_base = dz.SourceUrl("https://logec.repec.org")
 
 
-@dz.register_data_loader(cron="0 0 1 * *")
+# @dz.register_data_loader
 def load():
     nep_df = next(
         filter(lambda _df: _df.columns[0] == "access", pd.read_html(nep_base))
@@ -108,7 +107,7 @@ def load():
     )
 
 
-@dz.register_env_creator
+# @dz.register_env_creator
 def make_envs(abstract_chars, min_papers_per_author):
     au_df = (
         authorship_table.get_full_df(env="complete")
@@ -137,10 +136,6 @@ def make_envs(abstract_chars, min_papers_per_author):
             (neinc_df, nep_inclusion_table),
         ]
     )
-
-
-def get_soup(url):
-    return BeautifulSoup(requests.get(url).content, "html5lib")
 
 
 def dump_paper_meta(paper_links):
