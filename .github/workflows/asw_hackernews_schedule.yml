@@ -2,9 +2,6 @@ name: Scheduled hackernews
 on:
   schedule:
   - cron: 55 * * * *
-  push:
-    branches:
-      - main
 jobs:
   cron-run-hackernews:
     runs-on: ubuntu-latest
