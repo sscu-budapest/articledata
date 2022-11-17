@@ -14,3 +14,14 @@ stages:
       md5: 0e7bf4daa7152bc7ccdf4260dc8fa329.dir
       size: 3741692
       nfiles: 13
+  complete-repec:
+    cmd: dz run-step repec complete
+    deps:
+    - path: src/repec.py
+      md5: 1343c70f42e193e763a2d80b86946c40
+      size: 7633
+    outs:
+    - path: data/articles/repec/complete
+      md5: 75b1b4e717d1d9504d4d06c2a061f6d4.dir
+      size: 274422455
+      nfiles: 5

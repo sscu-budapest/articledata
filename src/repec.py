@@ -4,8 +4,9 @@ from functools import partial
 
 import datazimmer as dz
 import pandas as pd
-from aswan import get_soup
+import requests
 from atqo import parallel_map
+from bs4 import BeautifulSoup
 
 
 class Nep(dz.AbstractEntity):
@@ -65,27 +66,27 @@ nep_base = dz.SourceUrl("http://nep.repec.org/")
 stat_base = dz.SourceUrl("https://logec.repec.org")
 
 
-# @dz.register_data_loader
+@dz.register_data_loader
 def load():
-    nep_df = next(
-        filter(lambda _df: _df.columns[0] == "access", pd.read_html(nep_base))
-    ).rename(columns={"edited by": Nep.info, "access": Nep.nid})
+    nep_df = pd.DataFrame(parse_nep_soup(get_xml_soup(nep_base)))
+
     nep_table.replace_records(nep_df)
 
-    latest_collected_issues = (
-        nep_issue_table.get_full_df()
-        .groupby(NepIssue.nep.nid)[NepIssue.published]
-        .max()
-        .astype(str)
-        .to_dict()
-    )
+    issue_df = nep_issue_table.get_full_df()
+    if issue_df.empty:
+        latest_collected_issues = {}
+    else:
+        latest_collected_issues = (
+            issue_df.groupby(NepIssue.nep.nid)[NepIssue.published]
+            .max()
+            .astype(str)
+            .to_dict()
+        )
     nep_rec_sets = parallel_map(
         partial(get_archive, latest_ones=latest_collected_issues),
         nep_df[Nep.nid].tolist(),
         workers=10,
-        dist_api="mp",
         pbar=True,
-        raise_errors=True,
     )
     paper_rec_df = pd.concat(map(pd.DataFrame, nep_rec_sets)).assign(
         pid=lambda df: df["link"].pipe(paper_link_to_id),
@@ -178,9 +179,9 @@ def dump_paper_meta(paper_links):
         )
 
 
-def get_archive(nep_id, latest_ones):
+def get_archive(nep_id, latest_ones: dict):
     recs = []
-    archive_soup = get_soup(f"{econpaper_base}/scripts/nep.pf?list={nep_id}")
+    archive_soup = get_xml_soup(f"{econpaper_base}/scripts/nep.pf?list={nep_id}")
     latest_issue = latest_ones.get(nep_id, "")
     for a in archive_soup.find_all(
         "a", href=re.compile(r"/scripts/search.pf\?neplist=.*")
@@ -192,7 +193,7 @@ def get_archive(nep_id, latest_ones):
         url = f"{econpaper_base}{archive_link};iframes=no"
         ind_start = 1
         while True:
-            search_soup = get_soup(url)
+            search_soup = get_xml_soup(url)
             a_list = search_soup.find_all("a", href=re.compile("/paper/.*/.*"))
             recs += [
                 {
@@ -215,7 +216,7 @@ def get_archive(nep_id, latest_ones):
 
 
 def get_paper_dic(paper_link):
-    soup = get_soup(f"{econpaper_base}{paper_link}")
+    soup = get_xml_soup(f"{econpaper_base}{paper_link}")
     stat_link = soup.find("a", href=re.compile(f"{stat_base}/scripts/paperstat.pf.*"))
     meta_dic = {
         m.get("name"): m["content"] for m in soup.find_all("meta") if m.get("name")
@@ -242,6 +243,20 @@ def proc_authors(rels):
             }
         )
     )
+
+
+def parse_nep_soup(soup):
+    for _nep in soup.find_all("div", class_="nitpo_antem"):
+        info_txt = _nep.find_all("span")[2].text
+        yield {
+            Nep.nid: _nep.find_all("span")[1].text.strip(),
+            Nep.title: info_txt.split(",")[0].strip(),
+            Nep.info: ", ".join(info_txt.split(", ")[1:]).strip(),
+        }
+
+
+def get_xml_soup(url):
+    return BeautifulSoup(requests.get(url).content, "xml")
 
 
 def proc_keywords(_):
