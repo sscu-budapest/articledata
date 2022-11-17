@@ -9,3 +9,10 @@ stages:
     params:
     - zimmer.yaml:
       - aswan_projects.hackernews.current_leaf
+  complete-repec:
+    cmd: dz run-step repec complete
+    deps:
+    - src/repec.py
+    outs:
+    - data/articles/repec/complete:
+        persist: true
