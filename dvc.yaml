@@ -12,7 +12,22 @@ stages:
   complete-repec:
     cmd: dz run-step repec complete
     deps:
-    - src/repec.py
+    - src/repec/proc.py
+    - src/repec/project.py
     outs:
     - data/articles/repec/complete:
         persist: true
+    params:
+    - zimmer.yaml:
+      - aswan_projects.repec-nep.current_leaf
+  minimal-repec:
+    cmd: dz run-step repec minimal
+    deps:
+    - data/articles/repec/complete
+    - src/repec/proc.py
+    params:
+    - zimmer.yaml:
+      - envs.minimal.params.repec.abstract_chars
+      - envs.minimal.params.repec.min_papers_per_author
+    outs:
+    - data/articles/repec/minimal
