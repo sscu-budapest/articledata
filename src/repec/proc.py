@@ -94,6 +94,8 @@ def make_envs(abstract_chars, min_papers_per_author):
 def get_paper_rel_df(cev: aswan.ParsedCollectionEvent):
     soup = BeautifulSoup(cev.content, "xml")
     paper_as = soup.find_all("a", href=re.compile("/paper/.*/.*"))
+    if not paper_as:
+        return pd.DataFrame()
     return (
         pd.DataFrame({"p_link": [a["href"] for a in paper_as]})
         .assign(
@@ -102,7 +104,10 @@ def get_paper_rel_df(cev: aswan.ParsedCollectionEvent):
             pid=lambda df: df["p_link"].pipe(paper_link_to_id),
         )
         .pipe(_extract_from_h_link)
-        .assign(nepis=lambda df: df["nep"] + "-" + df["published"])
+        .assign(
+            nepis=lambda df: df["nep"] + "-" + df["published"],
+            ind=lambda df: df["ind"] + df["page"],
+        )
     )
 
 
