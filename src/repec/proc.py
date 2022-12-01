@@ -38,7 +38,7 @@ def load():
 
     nep_table.replace_records(nep_df)
 
-    cev_iter = islice(proj.get_unprocessed_events(HistoryHandler), 20)
+    cev_iter = proj.get_unprocessed_events(HistoryHandler)
 
     paper_rel_df = pd.concat(
         parallel_map(get_paper_rel_df, cev_iter, pbar=True, workers=N_WORKERS)
@@ -123,7 +123,7 @@ def _extract_from_h_link(df):
 
 
 def dump_paper_meta(project: dz.DzAswan):
-    cev_iter = islice(project.get_unprocessed_events(PaperHandler), 20)
+    cev_iter = project.get_unprocessed_events(PaperHandler)
     paper_dics = parallel_map(get_paper_dic, cev_iter, pbar=True, workers=N_WORKERS)
     paper_meta = (
         pd.DataFrame(paper_dics)
