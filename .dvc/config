@@ -1,4 +1,2 @@
 [core]
     remote = sscub-ibm-bucket
-['remote "sscub-ibm-bucket"']
-    url = s3://sscub-ibm-bucket
