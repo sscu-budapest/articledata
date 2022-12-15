@@ -1,4 +1,5 @@
 import datetime as dt
+import sys
 from typing import Union
 
 import aswan
@@ -32,6 +33,9 @@ class PostDzA(dz.DzAswan):
     name: str = "hackernews"
     cron: str = "55 * * * *"
     starters = {RegTop: [main_url], GiveUp: []}
+
+    def prepare_run(self):
+        sys.setrecursionlimit(10_000)
 
 
 class Post(dz.AbstractEntity):
