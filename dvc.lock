@@ -4,16 +4,16 @@ stages:
     cmd: dz run-step hackernews complete
     deps:
     - path: src/hackernews.py
-      md5: 76a0471b6136a60a5b768a0a64ad92f9
-      size: 2432
+      md5: 0994cf24607431adc46d3342fa64ff02
+      size: 2509
     params:
       zimmer.yaml:
-        aswan_projects.hackernews.current_leaf: bddc94a44a55e04bc790
+        aswan_projects.hackernews.current_leaf: 41ac3342a644b2e007d3
     outs:
     - path: data/articles/hackernews/complete
-      md5: 360d8ea85de93135e9ee9d788c31370c.dir
-      size: 411997
-      nfiles: 2
+      md5: a00ecaeecfd520698144c693eb3b3a37.dir
+      size: 823492
+      nfiles: 3
   complete-repec:
     cmd: dz run-step repec complete
     deps:
