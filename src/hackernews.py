@@ -1,4 +1,5 @@
 import datetime as dt
+import re
 import sys
 from typing import Union
 
@@ -60,7 +61,9 @@ def collect():
     for coll_ev in ap.get_unprocessed_events(RegTop):
         soup = BeautifulSoup(coll_ev.content, "lxml")
         df = pd.DataFrame(map(_parse_tr, soup.find_all("tr", class_="athing")))
-        df.assign(collected=coll_ev.cev.iso).pipe(post_table.extend)
+        post_table.extend(
+            df.dropna(subset=[Post.post_id]).assign(collected=coll_ev.cev.iso)
+        )
 
 
 def _parse_tr(tr: Tag):
@@ -68,6 +71,8 @@ def _parse_tr(tr: Tag):
     if title_a is None:
         title_a = tr.find("span", class_="titleline").find("a")
     sub_info = tr.find_next("tr")
+    if sub_info is None:
+        return {}
     last_link = sub_info.find_all("a")[-1]
     return {
         Post.post_id: tr["id"],
@@ -83,4 +88,4 @@ def _parse_tr(tr: Tag):
 
 
 def _parseint(elem):
-    return int("".join(getattr(elem, "text", "0 p").split()[:-1]))
+    return int("".join(re.findall("\d+", getattr(elem, "text", "0"))))
