@@ -10,6 +10,6 @@ envs:
         min_papers_per_author: 3
 aswan_projects:
   hackernews:
-    current_leaf: 9fecd6295d9367383c2e
+    current_leaf: f4b3a4826b99ddf5f5d8
   repec-nep:
     current_leaf: 9adb7536885deb4c8d52
