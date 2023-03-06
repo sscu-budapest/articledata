@@ -8,11 +8,11 @@ stages:
       size: 2613
     params:
       zimmer.yaml:
-        aswan_projects.hackernews.current_leaf: 6d02d1f0fdbaa20f9711
+        aswan_projects.hackernews.current_leaf: 75d38018ccc1708e5522
     outs:
     - path: data/articles/hackernews/complete
-      md5: fc1ac02d2ccaf3fae107e6f29b41aa9b.dir
-      size: 1803780
+      md5: fab4f66f9ceec60aea4d32a39f3a94ca.dir
+      size: 1935754
       nfiles: 7
   complete-repec:
     cmd: dz run-step repec complete
