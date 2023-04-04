@@ -8,45 +8,9 @@ stages:
       size: 2613
     params:
       zimmer.yaml:
-        aswan_projects.hackernews.current_leaf: 0d508f32dbefdbbaa1b6
+        aswan_projects.hackernews.current_leaf: fc67c93fd6a572258b45
     outs:
     - path: data/articles/hackernews/complete
-      md5: e3a53702a9e0d27718ff326411c08e36.dir
-      size: 2373167
-      nfiles: 9
-  complete-repec:
-    cmd: dz run-step repec complete
-    deps:
-    - path: src/repec/proc.py
-      md5: b930b533ea4ab2b1dd76ad4aeeb37bae
-      size: 5380
-    - path: src/repec/project.py
-      md5: fb406341d3acef27452b757328758785
-      size: 2257
-    params:
-      zimmer.yaml:
-        aswan_projects.repec-nep.current_leaf: 9adb7536885deb4c8d52
-    outs:
-    - path: data/articles/repec/complete
-      md5: 5d69a3697140d1d11371c0111c432fcd.dir
-      size: 320442037
-      nfiles: 6
-  minimal-repec:
-    cmd: dz run-step repec minimal
-    deps:
-    - path: data/articles/repec/complete
-      md5: 5d69a3697140d1d11371c0111c432fcd.dir
-      size: 320442037
-      nfiles: 6
-    - path: src/repec/proc.py
-      md5: b930b533ea4ab2b1dd76ad4aeeb37bae
-      size: 5380
-    params:
-      zimmer.yaml:
-        envs.minimal.params.repec.abstract_chars: 150
-        envs.minimal.params.repec.min_papers_per_author: 3
-    outs:
-    - path: data/articles/repec/minimal
-      md5: 8bdd07d4d906ae96598afe4331c08235.dir
-      size: 100289728
+      md5: c169a8dd84dfe0f017bcb97a959e1749.dir
+      size: 1179436
       nfiles: 6
