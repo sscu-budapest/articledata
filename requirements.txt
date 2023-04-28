@@ -1,2 +1,4 @@
 datazimmer[collect]>=0.4.2
 lxml
+fabric==3.0.0
+invoke==2.0.0
