@@ -8,9 +8,9 @@ stages:
       size: 2613
     params:
       zimmer.yaml:
-        aswan_projects.hackernews.current_leaf: 53cf7295a2225fd63856
+        aswan_projects.hackernews.current_leaf: 4c71bd9ab55a2c053fcf
     outs:
     - path: data/articles/hackernews/complete
-      md5: 68b08a5d8a4a712bf74ad364607ba673.dir
-      size: 1875125
+      md5: b8291e191963be0e16f8f61d8f159570.dir
+      size: 2011503
       nfiles: 8
