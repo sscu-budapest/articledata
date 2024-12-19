@@ -3,4 +3,4 @@ version: v0.8
 cron: 0 16 * * 1
 aswan_projects:
   hackernews:
-    current_leaf: 514ee4041ecdc9c41fa5
+    current_leaf: 6d7f2da148a819d53993
