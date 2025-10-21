@@ -1,7 +1,6 @@
 name: Scheduled zimmer-project
 on:
-  schedule:
-  - cron: 0 16 * * 1
+  workflow_dispatch:
 jobs:
   cron-run-zimmer-project:
     runs-on: ubuntu-latest
