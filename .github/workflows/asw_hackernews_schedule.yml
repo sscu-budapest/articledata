@@ -1,7 +1,6 @@
 name: Scheduled hackernews
 on:
-  schedule:
-  - cron: 55 * * * *
+  workflow_dispatch:
 jobs:
   cron-run-hackernews:
     runs-on: ubuntu-latest
